@@ -72,15 +72,11 @@ const generateQuestionOrder = (
 ): string[][] => {
   let count = 0;
   const questions: string[][] = [];
-  console.log({ borderingCountries, additionalCountries });
   borderingCountries.forEach((answerCountry) => {
     const questionSet: string[] = [];
     const questionOrder = randomizeArray([0, 1, 2, 3]);
-    console.log({ questionOrder });
     questionOrder.forEach((x) => {
-      console.log(x)
       if (x == 3) {
-        console.log('pushing answer')
         questionSet.push(answerCountry);
       } else {
         if (x + count > additionalCountries.length - 1) {
@@ -91,7 +87,6 @@ const generateQuestionOrder = (
     });
     questions.push(questionSet);
   });
-  console.log({ questions });
   return questions;
 };
 const generateQuestionData = (countryCodes: string[], data: Country[]) => {
