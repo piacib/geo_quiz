@@ -12,6 +12,7 @@ type Country = {
   updated: string;
 };
 type DataReturn = Country[] & RecordModel[];
+
 async function getCountries() {
   const pb = new PocketBase("http://127.0.0.1:8090");
 
@@ -19,14 +20,14 @@ async function getCountries() {
   const records = await pb.collection("country_borders").getFullList({
     sort: "-created",
   });
-  const countryCodes = new Set(
-    records.map((entry) => entry.country_code)
+  const countryNames = new Set(
+    records.map((entry) => entry.country_name)
   ) as Set<string>;
-  return [[...countryCodes], records] as [any, DataReturn];
+  return [[...countryNames], records] as [any, DataReturn];
 }
-const getBorderingCountries = (code: string, data: Country[]): string[] => {
-  const borderingCountries = data.filter((x) => x.country_border_code == code);
-  return borderingCountries.map((x) => x.country_code);
+const getBorderingCountries = (name: string, data: Country[]): string[] => {
+  const borderingCountries = data.filter((x) => x.country_border_name == name);
+  return borderingCountries.map((x) => x.country_name);
 };
 const getAdditionalCountries = (
   borderingCountries: string[],
@@ -89,9 +90,9 @@ const generateQuestionOrder = (
   });
   return questions;
 };
-const generateQuestionData = (countryCodes: string[], data: Country[]) => {
-  const rndIdx = Math.floor(Math.random() * countryCodes.length);
-  const country = countryCodes[rndIdx];
+const generateQuestionData = (countryNames: string[], data: Country[]) => {
+  const rndIdx = Math.floor(Math.random() * countryNames.length);
+  const country = countryNames[rndIdx];
   const borderingCountries = getBorderingCountries(country, data);
   const additionalCountries = getAdditionalCountries(
     borderingCountries,
