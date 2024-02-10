@@ -1,5 +1,6 @@
 import React from "react";
 import PocketBase, { RecordModel } from "pocketbase";
+import MultipleChoiceQuestion from "../components/MultipleChoiceQuestion";
 type Country = {
   collectionId: string;
   collectionName: string;
@@ -143,7 +144,7 @@ const page = async () => {
     borderingCountries,
     additionalCountries
   );
-
+  let idx = 0;
   // Return JSX to render the page
   return (
     <div>
@@ -153,21 +154,13 @@ const page = async () => {
       <div>____</div>
       <div>{JSON.stringify(additionalCountries)}</div>
       <div>____</div>
-      {questionSet.map((x, idx) => (
-        <>
-          <ul key={idx}>
-            {x.map((q, k) => (
-              <li key={k}>{q}</li>
-            ))}
-          </ul>
-          <br />
-        </>
-      ))}
-      {/* Uncomment the following section to display additional country names */}
-      {/* 
-      <div>
-        {JSON.stringify(additionalCountries.map((x) => x.country_name))}
-      </div> */}
+      <MultipleChoiceQuestion
+        question={`Which Country borders ${country}`}
+        options={questionSet[idx]}
+        onSelect={() => {
+          idx++;
+        }}
+      />
     </div>
   );
 };
